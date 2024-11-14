@@ -1,4 +1,4 @@
-module go-telegram-alert
+module github.com/stevenlawton/go-telegram-alert
 
 go 1.23.2
 

@@ -14,7 +14,7 @@
 To install the library, use:
 
 ```sh
-go get github.com/yourusername/gotelalert
+go get github.com/stevenlawton/go-telegram-alert
 ```
 
 ## Usage
@@ -26,7 +26,7 @@ package main
 
 import (
 	"log"
-	"gotelalert"
+	"github.com/stevenlawton/go-telegram-alert"
 )
 
 func main() {
@@ -70,4 +70,17 @@ The logger allows setting different log levels to filter messages sent to Telegr
 - **ERROR**: Only `ERROR` and `FATAL` log messages will be sent.
 - **FATAL**: Only `FATAL` log messages will be sent.
 
-The default log level is `INFO`. You can change it b
+The default log level is `INFO`. You can change it by sending commands to the bot.
+
+## License
+
+MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contributing
+
+Feel free to open issues or submit pull requests to improve the library. Contributions are welcome!
+
+## Acknowledgements
+
+- [go-telegram-bot-api](https://github.com/go-telegram-bot-api/telegram-bot-api) - Used for interacting with the Telegram Bot API.
+

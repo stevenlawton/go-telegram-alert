@@ -39,8 +39,9 @@ func main() {
 	}
 
 	// Now use log functions as usual
-	log.Println("This is an informational message.")
-	log.Fatal("This is a fatal error message.")
+	log.Println("INFO: This is an informational message.")
+	log.Println("ERROR: This is an error message.")
+	log.Fatal("FATAL: This is a fatal error message.")
 }
 ```
 
@@ -58,9 +59,15 @@ You can control the verbosity of the logs sent to Telegram by using the followin
 
 Initializes the Telegram logger and sets it as the default logger. You must provide your bot's token and the chat ID where you want the logs to be sent.
 
-### Example Usage
+### Logging at Appropriate Levels
 
-After initializing the logger with `NewTeleLogger`, use the standard `log` functions (`log.Println`, `log.Printf`, `log.Fatal`, etc.) to generate log messages. These messages will be forwarded to the specified Telegram chat based on the set log level.
+After initializing the logger with `NewTeleLogger`, use the standard `log` functions (`log.Println`, `log.Printf`, `log.Fatal`, etc.) to generate log messages. To ensure the log messages are categorized properly:
+
+- **Informational Messages**: Use `log.Println("INFO: message")` for general information.
+- **Error Messages**: Use `log.Println("ERROR: message")` to indicate an error.
+- **Fatal Messages**: Use `log.Fatal("FATAL: message")` to log fatal issues that will stop the program.
+
+These messages will be forwarded to the specified Telegram chat based on the set log level.
 
 ## Log Levels
 

@@ -75,9 +75,9 @@ func (t *TeleLogger) shouldLogMessage(message string) bool {
 	case LogLevelInfo:
 		return true
 	case LogLevelError:
-		return !(message == "INFO")
+		return !(message[:5] == "INFO:")
 	case LogLevelFatal:
-		return message == "FATAL"
+		return message[:6] == "FATAL:"
 	default:
 		return true
 	}
@@ -118,9 +118,10 @@ func Example() {
 	chatID := int64(-1) // Ensure this is an int64
 	err := NewTeleLogger(botToken, chatID)
 	if err != nil {
-		log.Fatalf("Failed to create TeleLogger: %v", err)
+		log.Fatalf("FATAL: Failed to create TeleLogger: %v", err)
 	}
 
-	log.Println("This is an informational message.")
-	log.Fatal("This is a fatal error message.")
+	log.Println("INFO: This is an informational message.")
+	log.Println("ERROR: This is an error message.")
+	log.Fatal("FATAL: This is a fatal error message.")
 }

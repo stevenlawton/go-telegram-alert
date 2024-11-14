@@ -1,4 +1,4 @@
-module go-telegram-logger
+module go-telegram-alert
 
 go 1.23.2
 

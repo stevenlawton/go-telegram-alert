@@ -1,0 +1,74 @@
+name: Auto Tag and Release
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tag-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          # Fetch all tags
+          git fetch --tags
+          
+          # Get the latest tag
+          latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          if [ -z "$latest_tag" ]; then
+            echo "latest_tag=v0.0.0" >> $GITHUB_ENV
+          else
+            echo "latest_tag=$latest_tag" >> $GITHUB_ENV
+          fi
+
+      - name: Calculate next version
+        id: calc_next_version
+        run: |
+          # Extract the version numbers
+          latest_tag=${{ env.latest_tag }}
+          version_core=${latest_tag#v}
+          IFS='.' read -r -a version_parts <<< "$version_core"
+          
+          # Increment the patch version (e.g., v0.0.1 -> v0.0.2)
+          major=${version_parts[0]}
+          minor=${version_parts[1]}
+          patch=${version_parts[2]}
+          patch=$((patch + 1))
+          
+          # Create new version
+          new_version="v$major.$minor.$patch"
+          echo "new_version=$new_version" >> $GITHUB_ENV
+          echo "Next version: $new_version"
+
+      - name: Create and push new tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Configure git user
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Create new tag and push
+          git tag ${{ env.new_version }}
+          git push origin ${{ env.new_version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.new_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
